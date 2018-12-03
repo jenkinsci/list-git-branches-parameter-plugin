@@ -1,0 +1,30 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+         xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+         xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+    <st:adjunct includes="org.kohsuke.stapler.jquery" />
+    <st:adjunct includes="com.shopee.hudson.plugins.listgitbranches.script" />
+    <j:set var="divId" value="${it.divUUID}" scope="parent" />
+    <j:set var="escapeEntryTitleAndDescription" value="false"/>
+    <f:entry title="${it.name}" description="${it.description}">
+        <!-- this div is required because of ParametersDefinitionProperty.java#117 -->
+        <div name="parameter" id="${divId}">
+            <st:adjunct includes="lib.form.select.select"/>
+            <input type="hidden" name="name" value="${it.name}"/>
+            <select name="value" class="select" size="${it.listSize}" style="min-width: 200px" id="select"
+                    fillUrl="${h.getCurrentDescriptorByNameUrl()}/${it.descriptor.descriptorUrl}/fillValueItems?param=${it.name}">
+                <option value="">${%Retrieving tags…}</option>
+            </select>
+            <j:if test="${it.quickFilterEnabled}">
+                <input class='git_parameter_quick_filter' type='text' value='' name='quickFilter' placeholder='Filter'
+                       style="vertical-align: top" id="filter"/>
+            </j:if>
+            <script type="text/javascript">
+                var parentDiv = jQuery('#${divId}');
+                new ListGitBranches.QuickFilter(parentDiv.find('.select').get(0),
+                        parentDiv.find('.git_parameter_quick_filter').get(0),
+                        "${it.selectedValue}", "${it.defaultValue}");
+            </script>
+        </div>
+    </f:entry>
+</j:jelly>
