@@ -1,4 +1,4 @@
-package com.syhuang.hudson.plugins.listgitbranches;
+package com.syhuang.hudson.plugins.listgitbranchesparameter;
 
 import java.io.Serializable;
 import java.math.BigInteger;

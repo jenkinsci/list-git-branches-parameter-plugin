@@ -1,4 +1,4 @@
-package com.syhuang.hudson.plugins.listgitbranches;
+package com.syhuang.hudson.plugins.listgitbranchesparameter;
 
 enum SortMode {
     NONE, ASCENDING_SMART, DESCENDING_SMART, ASCENDING, DESCENDING;

@@ -1,4 +1,4 @@
-package com.syhuang.hudson.plugins.listgitbranches;
+package com.syhuang.hudson.plugins.listgitbranchesparameter;
 
 import com.cloudbees.jenkins.plugins.sshcredentials.SSHUserPrivateKey;
 import com.cloudbees.plugins.credentials.CredentialsMatcher;
@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class ListGitBranchesDefinition extends ParameterDefinition implements Comparable<ListGitBranchesDefinition> {
+public class ListGitBranchesParameterDefinition extends ParameterDefinition implements Comparable<ListGitBranchesParameterDefinition> {
     private static final String PARAMETER_TYPE_TAG = "PT_TAG";
     private static final String PARAMETER_TYPE_BRANCH = "PT_BRANCH";
     private static final String PARAMETER_TYPE_TAG_BRANCH = "PT_BRANCH_TAG";
@@ -48,7 +48,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
     private static final String DEFAULT_LIST_SIZE = "5";
     private static final String REFS_TAGS_PATTERN = ".*refs/tags/";
     private static final String REFS_HEADS_PATTERN = ".*refs/heads/";
-    private static final Logger LOGGER = Logger.getLogger(ListGitBranchesDefinition.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ListGitBranchesParameterDefinition.class.getName());
     private final UUID uuid;
     private String remoteURL;
     private String credentialsId;
@@ -63,9 +63,9 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
 
 
     @DataBoundConstructor
-    public ListGitBranchesDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
-                                     SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
-                                     String type, String tagFilter, String branchFilter) {
+    public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
+                                              SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
+                                              String type, String tagFilter, String branchFilter) {
         super(name, description);
         this.remoteURL = remoteURL;
         this.credentialsId = credentialsId;
@@ -101,7 +101,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
             strValue.append(defaultValue);
         }
 
-        return new ListGitBranchesValue(jo.getString("name"), strValue.toString());
+        return new ListGitBranchesParameterValue(jo.getString("name"), strValue.toString());
     }
 
     @Override
@@ -110,14 +110,14 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
         if (value == null || value.length == 0 || StringUtils.isBlank(value[0])) {
             return this.getDefaultParameterValue();
         } else {
-            return new ListGitBranchesValue(getName(), value[0]);
+            return new ListGitBranchesParameterValue(getName(), value[0]);
         }
     }
 
     @Override
     public ParameterValue createValue(CLICommand command, String value) {
         if (StringUtils.isNotEmpty(value)) {
-            return new ListGitBranchesValue(getName(), value);
+            return new ListGitBranchesParameterValue(getName(), value);
         }
         return getDefaultParameterValue();
     }
@@ -126,7 +126,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
     public ParameterValue getDefaultParameterValue() {
         String defValue = getDefaultValue();
         if (!StringUtils.isBlank(defaultValue)) {
-            return new ListGitBranchesValue(getName(), defValue);
+            return new ListGitBranchesParameterValue(getName(), defValue);
         }
 
         switch (getSelectedValue()) {
@@ -134,7 +134,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
                 try {
                     ListBoxModel valueItems = getDescriptor().doFillValueItems(getParentJob(), getName());
                     if (valueItems.size() > 0) {
-                        return new ListGitBranchesValue(getName(), valueItems.get(0).value);
+                        return new ListGitBranchesParameterValue(getName(), valueItems.get(0).value);
                     }
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, getCustomJobName() + " " + " ", e);
@@ -173,7 +173,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
 
                 if (parameterDefinitions != null) {
                     for (ParameterDefinition pd : parameterDefinitions) {
-                        if (pd instanceof ListGitBranchesDefinition && ((ListGitBranchesDefinition) pd).compareTo(this) == 0) {
+                        if (pd instanceof ListGitBranchesParameterDefinition && ((ListGitBranchesParameterDefinition) pd).compareTo(this) == 0) {
                             context = job;
                             break;
                         }
@@ -394,7 +394,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
     }
 
     @Override
-    public int compareTo(ListGitBranchesDefinition o) {
+    public int compareTo(ListGitBranchesParameterDefinition o) {
         return o.uuid.equals(uuid) ? 0 : -1;
     }
 
@@ -404,7 +404,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
         @Override
         @Nonnull
         public String getDisplayName() {
-            return ResourceBundleHolder.get(ListGitBranchesDefinition.class).format("displayName");
+            return ResourceBundleHolder.get(ListGitBranchesParameterDefinition.class).format("displayName");
         }
 
         public ListBoxModel doFillCredentialsIdItems(@AncestorInPath Item context, @QueryParameter String remote) {
@@ -463,8 +463,8 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
                 ParametersDefinitionProperty prop = context.getProperty(ParametersDefinitionProperty.class);
                 if (prop != null) {
                     ParameterDefinition def = prop.getParameterDefinition(param);
-                    if (def instanceof ListGitBranchesDefinition) {
-                        Map<String, String> paramList = ((ListGitBranchesDefinition) def).generateContents(context);
+                    if (def instanceof ListGitBranchesParameterDefinition) {
+                        Map<String, String> paramList = ((ListGitBranchesParameterDefinition) def).generateContents(context);
                         for (Map.Entry<String, String> entry : paramList.entrySet()) {
                             items.add(entry.getValue(), entry.getKey());
                         }
