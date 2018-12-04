@@ -1,0 +1,20 @@
+<FindBugsFilter>
+    <!-- Jenkins.getInstance() always returns a non-null. -->
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+        <Class name="com.syhuang.hudson.plugins.listgitbranches.ListGitBranchesDefinition"/>
+        <Method name="createGitClient"/>
+    </Match>
+    <!-- Jenkins.getInstance() always returns a non-null. -->
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+        <Class name="com.syhuang.hudson.plugins.listgitbranches.ListGitBranchesDefinition"/>
+        <Method name="getParentJob"/>
+    </Match>
+    <!-- Jenkins.getInstance() always returns a non-null. -->
+
+    <Match>
+        <Bug pattern="EQ_COMPARETO_USE_OBJECT_EQUALS"/>
+        <Class name="com.syhuang.hudson.plugins.listgitbranches.ListGitBranchesDefinition"/>
+    </Match>
+</FindBugsFilter>

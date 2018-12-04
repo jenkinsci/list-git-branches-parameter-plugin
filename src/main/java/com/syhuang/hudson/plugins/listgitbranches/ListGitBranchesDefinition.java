@@ -449,7 +449,7 @@ public class ListGitBranchesDefinition extends ParameterDefinition implements Co
             }
 
             try {
-                URIish remoteURL = new URIish(value);
+                new URIish(value);
             } catch (URISyntaxException e) {
                 return FormValidation.error("Repository URL is illegal");
             }
