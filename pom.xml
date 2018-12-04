@@ -12,14 +12,13 @@
         <version>2.26</version>
     </parent>
 
-    <groupId>org.jenkins-ci.tools</groupId>
     <artifactId>list-git-branches</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>hpi</packaging>
     <name>List Git Branches Plug-In</name>
     <description>Assign git tag or revision number as parameter in Parametrized builds</description>
-    <url></url>
+    <url>https://wiki.jenkins.io/display/JENKINS/List+Git+Branches+Plugin</url>
 
     <licenses>
         <license>
@@ -42,8 +41,9 @@
 
     <developers>
         <developer>
-            <id>suoyuan.huang</id>
+            <id>huangsuoyuan</id>
             <name>Huang Suoyuan</name>
+            <email>huangsuoyuan@gmail.com</email>
         </developer>
     </developers>
 
