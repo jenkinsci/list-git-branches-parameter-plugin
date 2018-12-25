@@ -43,6 +43,11 @@
             <name>Huang Suoyuan</name>
             <email>huangsuoyuan@gmail.com</email>
         </developer>
+        <developer>
+            <id>jianxiongliu</id>
+            <name>Liu Jianxiong</name>
+            <email>jianxiongliu@gmail.com</email>
+        </developer>
     </developers>
 
     <pluginRepositories>
