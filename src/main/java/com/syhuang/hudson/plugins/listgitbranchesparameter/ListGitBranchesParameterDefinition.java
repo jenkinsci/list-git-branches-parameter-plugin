@@ -258,7 +258,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     public void setBranchFilter(String branchFilter) {
         if (StringUtils.isEmpty(StringUtils.trim(branchFilter))) {
-            branchFilter = "*";
+            branchFilter = ".";
         }
         this.branchFilter = branchFilter;
     }
