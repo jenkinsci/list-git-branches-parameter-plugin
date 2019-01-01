@@ -73,6 +73,10 @@
             <f:textbox/>
         </f:entry>
 
+        <f:entry title="${%parameter.branch.filter}" field="branchFilter">
+            <f:textbox/>
+        </f:entry>
+
         <f:entry title="${%parameter.default.value}" field="defaultValue">
             <f:textbox/>
         </f:entry>

@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>list-git-branches-parameter</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <packaging>hpi</packaging>
     <name>List Git Branches Parameter PlugIn</name>
