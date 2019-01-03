@@ -316,13 +316,20 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     private Set<String> getBranch(GitClient gitClient, String gitUrl) throws InterruptedException {
         Set<String> branchSet = new HashSet<>();
+        String remote = "origin";
         Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, branchFilter, true, false);
 
-        for (String branchName : branches.keySet()) {
-            branchSet.add(branchName.replaceFirst(REFS_HEADS_PATTERN, ""));
+        for (String s : branches.keySet()) {
+            String branchName = strip(s, remote);
+            branchSet.add(branchName);
         }
 
         return branchSet;
+    }
+
+    // looks like this strip is required by git plugin
+    private String strip(String name, String remote) {
+        return remote + "/" + name.substring(name.indexOf('/', 5) + 1);
     }
 
     @Nonnull
