@@ -247,7 +247,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     public void setTagFilter(String tagFilter) {
         if (StringUtils.isEmpty(StringUtils.trim(tagFilter))) {
-            tagFilter = "*";
+            tagFilter = ".*";
         }
         this.tagFilter = tagFilter;
     }
@@ -258,7 +258,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     public void setBranchFilter(String branchFilter) {
         if (StringUtils.isEmpty(StringUtils.trim(branchFilter))) {
-            branchFilter = ".";
+            branchFilter = ".*";
         }
         this.branchFilter = branchFilter;
     }
