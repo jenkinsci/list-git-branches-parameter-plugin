@@ -3,7 +3,7 @@
          xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
          xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
     <st:adjunct includes="org.kohsuke.stapler.jquery" />
-    <st:adjunct includes="com.shopee.hudson.plugins.listgitbranches.script" />
+    <st:adjunct includes="com.syhuang.hudson.plugins.listgitbranchesparameter.script" />
     <j:set var="divId" value="${it.divUUID}" scope="parent" />
     <j:set var="escapeEntryTitleAndDescription" value="false"/>
     <f:entry title="${it.name}" description="${it.description}">

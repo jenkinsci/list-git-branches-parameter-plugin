@@ -37,6 +37,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -316,14 +317,22 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     private Set<String> getBranch(GitClient gitClient, String gitUrl) throws InterruptedException {
         Set<String> branchSet = new HashSet<>();
-        String remote = "origin";
-        Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, branchFilter, true, false);
+        String remoteName = "origin";
+        Pattern branchFilterPattern = compileBranchFilterPattern();
 
-        for (String s : branches.keySet()) {
-            String branchName = strip(s, remote);
-            branchSet.add(branchName);
+        Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, null, true, false);
+        Iterator<String> remoteBranchesName = branches.keySet().iterator();
+        while (remoteBranchesName.hasNext()) {
+            String branchName = strip(remoteBranchesName.next(), remoteName);
+            Matcher matcher = branchFilterPattern.matcher(branchName);
+            if (matcher.matches()) {
+                if (matcher.groupCount() == 1) {
+                    branchSet.add(matcher.group(1));
+                } else {
+                    branchSet.add(branchName);
+                }
+            }
         }
-
         return branchSet;
     }
 
