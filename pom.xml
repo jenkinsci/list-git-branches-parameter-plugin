@@ -12,7 +12,7 @@
 
     <groupId>org.jenkins-ci.tools</groupId>
     <artifactId>list-git-branches-parameter</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
 
     <packaging>hpi</packaging>
     <name>List Git Branches Parameter PlugIn</name>
