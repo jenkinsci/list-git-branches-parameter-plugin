@@ -248,7 +248,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     public void setTagFilter(String tagFilter) {
         if (StringUtils.isEmpty(StringUtils.trim(tagFilter))) {
-            tagFilter = ".*";
+            tagFilter = "*";
         }
         this.tagFilter = tagFilter;
     }
@@ -307,7 +307,8 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         try {
             Map<String, ObjectId> tags = gitClient.getRemoteReferences(gitUrl, tagFilter, false, true);
             for (String tagName : tags.keySet()) {
-                tagSet.add(tagName.replaceFirst(REFS_TAGS_PATTERN, ""));
+                //tagSet.add(tagName.replaceFirst(REFS_TAGS_PATTERN, ""));
+                tagSet.add(tagName);
             }
         } catch (GitException e) {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
@@ -323,7 +324,8 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, null, true, false);
         Iterator<String> remoteBranchesName = branches.keySet().iterator();
         while (remoteBranchesName.hasNext()) {
-            String branchName = strip(remoteBranchesName.next(), remoteName);
+            //String branchName = strip(remoteBranchesName.next(), remoteName);
+            String branchName = remoteBranchesName.next();
             Matcher matcher = branchFilterPattern.matcher(branchName);
             if (matcher.matches()) {
                 if (matcher.groupCount() == 1) {
