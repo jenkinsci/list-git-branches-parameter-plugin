@@ -70,11 +70,11 @@
         </f:entry>
 
         <f:entry title="${%parameter.tag.filter}" field="tagFilter">
-            <f:textbox/>
+            <f:textbox default="*"/>
         </f:entry>
 
         <f:entry title="${%parameter.branch.filter}" field="branchFilter">
-            <f:textbox/>
+            <f:textbox default=".*"/>
         </f:entry>
 
         <f:entry title="${%parameter.default.value}" field="defaultValue">
