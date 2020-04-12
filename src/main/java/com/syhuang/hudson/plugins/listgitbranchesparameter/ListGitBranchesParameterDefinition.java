@@ -318,29 +318,22 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     private Set<String> getBranch(GitClient gitClient, String gitUrl) throws InterruptedException {
         Set<String> branchSet = new HashSet<>();
-        String remoteName = "origin";
         Pattern branchFilterPattern = compileBranchFilterPattern();
 
         Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, null, true, false);
         Iterator<String> remoteBranchesName = branches.keySet().iterator();
         while (remoteBranchesName.hasNext()) {
-            //String branchName = strip(remoteBranchesName.next(), remoteName);
             String branchName = remoteBranchesName.next();
             Matcher matcher = branchFilterPattern.matcher(branchName);
             if (matcher.matches()) {
                 if (matcher.groupCount() == 1) {
-                    branchSet.add(matcher.group(1));
+                    branchSet.add(matcher.group(1).substring(11));  // remove refs/heads/
                 } else {
-                    branchSet.add(branchName);
+                    branchSet.add(branchName.substring(11)); // remove refs/heads/
                 }
             }
         }
         return branchSet;
-    }
-
-    // looks like this strip is required by git plugin
-    private String strip(String name, String remote) {
-        return remote + "/" + name.substring(name.indexOf('/', 5) + 1);
     }
 
     @Nonnull
@@ -377,7 +370,6 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     private GitClient createGitClient(Job job) throws IOException, InterruptedException {
         EnvVars env = Objects.requireNonNull(Objects.requireNonNull(Jenkins.getInstance()).toComputer()).getEnvironment();
         Git git = Git.with(TaskListener.NULL, env);
-
         GitClient c = git.getClient();
         List<StandardUsernameCredentials> urlCredentials = CredentialsProvider.lookupCredentials(
                 StandardUsernameCredentials.class, job, ACL.SYSTEM, URIRequirementBuilder.fromUri(remoteURL).build()

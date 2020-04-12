@@ -11,13 +11,12 @@
         <div name="parameter" id="${divId}">
             <st:adjunct includes="lib.form.select.select"/>
             <input type="hidden" name="name" value="${it.name}"/>
-            <select name="value" class="select" size="${it.listSize}" style="min-width: 200px" id="select"
+            <select name="value" class="select" size="${it.listSize}" style="width: 100%" id="select"
                     fillUrl="${h.getCurrentDescriptorByNameUrl()}/${it.descriptor.descriptorUrl}/fillValueItems?param=${it.name}">
                 <option value="">${%Retrieving tags…}</option>
             </select>
             <j:if test="${it.quickFilterEnabled}">
-                <input class='git_parameter_quick_filter' type='text' value='' name='quickFilter' placeholder='Filter'
-                       style="vertical-align: top" id="filter"/>
+                <p><input class='git_parameter_quick_filter' type='text' value='' name='quickFilter' placeholder='Filtering on parameter: "${it.name}". Enter regular expression e.g. .*vul, vul|sir and etc.' style="width: 100%" id="filter"/></p>
             </j:if>
             <script type="text/javascript">
                 var parentDiv = jQuery('#${divId}');
