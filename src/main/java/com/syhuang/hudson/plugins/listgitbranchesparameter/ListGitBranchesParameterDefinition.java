@@ -307,8 +307,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         try {
             Map<String, ObjectId> tags = gitClient.getRemoteReferences(gitUrl, tagFilter, false, true);
             for (String tagName : tags.keySet()) {
-                //tagSet.add(tagName.replaceFirst(REFS_TAGS_PATTERN, ""));
-                tagSet.add(tagName);
+                tagSet.add(tagName.replaceFirst(REFS_TAGS_PATTERN, ""));
             }
         } catch (GitException e) {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
