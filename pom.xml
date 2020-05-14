@@ -49,6 +49,11 @@
             <name>Liu Jianxiong</name>
             <email>jianxiongliu@gmail.com</email>
         </developer>
+        <developer>
+            <id>wisdombyzf</id>
+            <name>Zhang Fan</name>
+            <email>781516223@qq.com</email>
+        </developer>
     </developers>
 
     <pluginRepositories>
