@@ -66,7 +66,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     @DataBoundConstructor
     public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
                                               SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
-                                              String type, String tagFilter, String branchFilter) {
+                                              String type, String tagFilter, String branchFilter, String listSize) {
         super(name, description);
         this.remoteURL = remoteURL;
         this.credentialsId = credentialsId;
@@ -75,7 +75,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         this.sortMode = sortMode;
         this.selectedValue = selectedValue;
         this.quickFilterEnabled = quickFilterEnabled;
-        this.listSize = DEFAULT_LIST_SIZE;
+        this.listSize = listSize;
 
         setType(type);
         setTagFilter(tagFilter);
