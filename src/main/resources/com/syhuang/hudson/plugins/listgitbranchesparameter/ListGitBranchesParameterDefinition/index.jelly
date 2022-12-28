@@ -6,7 +6,7 @@
     <st:adjunct includes="com.syhuang.hudson.plugins.listgitbranchesparameter.script" />
     <j:set var="divId" value="${it.divUUID}" scope="parent" />
     <j:set var="escapeEntryTitleAndDescription" value="false"/>
-    <f:entry title="${it.name}" description="${it.description}">
+    <f:entry title="${h.escape(it.name)}" description="${it.formattedDescription}">
         <!-- this div is required because of ParametersDefinitionProperty.java#117 -->
         <div name="parameter" id="${divId}">
             <st:adjunct includes="lib.form.select.select"/>
