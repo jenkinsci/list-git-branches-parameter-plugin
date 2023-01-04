@@ -5,7 +5,7 @@ import com.sonyericsson.rebuild.RebuildParameterProvider;
 import hudson.Extension;
 import hudson.model.ParameterValue;
 
-@Extension
+@Extension(optional = true)
 public class ListGitBranchesParameterRebuild extends RebuildParameterProvider {
     @Override
     public RebuildParameterPage getRebuildPage(ParameterValue parameterValue) {
