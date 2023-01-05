@@ -162,7 +162,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     private Job getParentJob() {
         Job context = null;
-        List<Job> jobs = Objects.requireNonNull(Jenkins.getInstance()).getAllItems(Job.class);
+        List<Job> jobs = Jenkins.get().getAllItems(Job.class);
 
         for (Job job : jobs) {
             if (!(job instanceof TopLevelItem)) continue;
@@ -374,7 +374,14 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
 
     private GitClient createGitClient(Job job) throws IOException, InterruptedException {
-        EnvVars env = Objects.requireNonNull(Objects.requireNonNull(Jenkins.getInstance()).toComputer()).getEnvironment();
+        final Computer computer = Jenkins.get().toComputer();
+        EnvVars env;
+        if (computer != null) {
+            env = computer.getEnvironment();
+        } else {
+          env = null;
+        }
+
         Git git = Git.with(TaskListener.NULL, env);
 
         GitClient c = git.getClient();
