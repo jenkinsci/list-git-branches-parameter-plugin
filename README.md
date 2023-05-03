@@ -26,3 +26,38 @@ Sometimes we want to specify a git branch or tag before as a parameter, for "Pip
     -   **Credentials**- Git credentials stored in jenkins
 -   Start a build and use the parameter
     ![](docs/images/image2018-12-25_16-56-6.png)
+
+## HowToUse
+
+Please refer to wiki [List Git Branches Parameter Plugin](https://wiki.jenkins.io/display/JENKINS/List+Git+Branches+Parameter+Plugin)
+
+## Updated Multi Remote repositories by DBeaver
+
+Use `remoteURLs: ['repo1', repo2]` parameter argument for get branches from another repos
+
+example:
+```
+properties([
+	parameters([
+	[$class: 'ListGitBranchesParameterDefinition',
+		name: 'Branch',
+		type: 'Branch',
+		quickFilterEnabled: true,
+		description: 'Get branches',
+		remoteURL: 'https://github.com/dbeaver/dbeaver-devops',
+		remoteURLs: ['https://github.com/dbeaver/dbeaver-ee', 'https://github.com/dbeaver/cloudbeaver-ee'],
+		credentialsId: 'devops_gh_token',
+		selectedValue: 'DEFAULT',
+		defaultValue: 'devel',
+		sortMode: 'ASCENDING_SMART',
+		branchFilter: 'refs/heads/.*'
+	]
+	])
+])
+
+pipeline {
+    ...
+}
+```
+
+### Build this sheet with `JAVA_HOME='/usr/lib/jvm/java-8-openjdk' mvn clean install`
