@@ -53,6 +53,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     private static final Logger LOGGER = Logger.getLogger(ListGitBranchesParameterDefinition.class.getName());
     private final UUID uuid;
     private String remoteURL;
+    private ArrayList<String> remoteURLs;
     private String credentialsId;
     private String defaultValue;
     private String type;
@@ -65,11 +66,12 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
 
     @DataBoundConstructor
-    public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
+    public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, ArrayList<String> remoteURLs, String credentialsId, String defaultValue,
                                               SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
                                               String type, String tagFilter, String branchFilter, String listSize) {
         super(name);
         this.remoteURL = remoteURL;
+        this.remoteURLs = remoteURLs;
         this.credentialsId = credentialsId;
         this.defaultValue = defaultValue;
         this.uuid = UUID.randomUUID();
@@ -215,6 +217,14 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         this.remoteURL = remoteURL;
     }
 
+    public ArrayList<String> getRemoteURLs() {
+        return remoteURLs;
+    }
+
+    public void setRemoteURLs(ArrayList<String> remoteURLs) {
+        this.remoteURLs = remoteURLs;
+    }
+
     public String getListSize() {
         return listSize == null ? DEFAULT_LIST_SIZE : listSize;
     }
@@ -322,17 +332,17 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         Pattern branchFilterPattern = compileBranchFilterPattern();
 
         Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, null, true, false);
-	    for (String branchName : branches.keySet()) {
-		    //String branchName = strip(remoteBranchesName.next(), remoteName);
-		    Matcher matcher = branchFilterPattern.matcher(branchName);
-		    if (matcher.matches()) {
-			    if (matcher.groupCount() == 1) {
-				    branchSet.add(matcher.group(1));
-			    } else {
-				    branchSet.add(branchName);
-			    }
-		    }
-	    }
+        for (String branchName : branches.keySet()) {
+            //String branchName = strip(remoteBranchesName.next(), remoteName);
+            Matcher matcher = branchFilterPattern.matcher(branchName);
+            if (matcher.matches()) {
+                if (matcher.groupCount() == 1) {
+                    branchSet.add(matcher.group(1));
+                } else {
+                    branchSet.add(branchName);
+                }
+            }
+        }
         return branchSet;
     }
 
@@ -344,7 +354,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     @Nonnull
     private Map<String, String> generateContents(Job job) throws IOException, InterruptedException {
         Map<String, String> paramList = new LinkedHashMap<>();
-        GitClient gitClient = createGitClient(job);
+        GitClient gitClient = createGitClient(job, remoteURL);
         try {
             if (isTagType()) {
                 Set<String> tagSet = getTag(gitClient, remoteURL);
@@ -352,6 +362,12 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
             }
             if (isBranchType()) {
                 Set<String> branchSet = getBranch(gitClient, remoteURL);
+                if (remoteURLs != null) {
+                    for (String customURL : remoteURLs) {
+                        GitClient gitClientCustom = createGitClient(job, customURL);
+                        branchSet.addAll(getBranch(gitClientCustom, customURL));
+                    }
+                }
                 sortAndPutToParam(branchSet, paramList);
             }
 
@@ -372,7 +388,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     }
 
 
-    private GitClient createGitClient(Job job) throws IOException, InterruptedException {
+    private GitClient createGitClient(Job job, String remoteUrl) throws IOException, InterruptedException {
         final Computer computer = Jenkins.get().toComputer();
         EnvVars env;
         if (computer != null) {
@@ -392,7 +408,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         StandardUsernameCredentials credentials = CredentialsMatchers.firstOrNull(urlCredentials, idMatcher);
 
         if (credentials != null) {
-            c.addCredentials(remoteURL, credentials);
+            c.addCredentials(remoteUrl, credentials);
             if (job != null && job.getLastBuild() != null) {
                 CredentialsProvider.track(job.getLastBuild(), credentials);
             }
