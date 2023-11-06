@@ -66,6 +66,24 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     @DataBoundConstructor
     public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
                                               SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
+                                              String type, String tagFilter, String branchFilter) {
+		super(name, description);
+		this.remoteURL = remoteURL;
+        this.credentialsId = credentialsId;
+        this.defaultValue = defaultValue;
+        this.uuid = UUID.randomUUID();
+        this.sortMode = sortMode;
+        this.selectedValue = selectedValue;
+        this.quickFilterEnabled = quickFilterEnabled;
+        this.listSize = DEFAULT_LIST_SIZE;
+		
+		setType(type);
+        setTagFilter(tagFilter);
+        setBranchFilter(branchFilter);
+    }
+
+    public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
+                                              SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
                                               String type, String tagFilter, String branchFilter, String listSize) {
         super(name, description);
         this.remoteURL = remoteURL;
