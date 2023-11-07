@@ -67,8 +67,8 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
                                               SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
                                               String type, String tagFilter, String branchFilter) {
-       super(name, description);
-       this.remoteURL = remoteURL;
+        super(name, description);
+        this.remoteURL = remoteURL;
         this.credentialsId = credentialsId;
         this.defaultValue = defaultValue;
         this.uuid = UUID.randomUUID();
@@ -77,7 +77,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         this.quickFilterEnabled = quickFilterEnabled;
         this.listSize = DEFAULT_LIST_SIZE;
 		
-       setType(type);
+        setType(type);
         setTagFilter(tagFilter);
         setBranchFilter(branchFilter);
     }
