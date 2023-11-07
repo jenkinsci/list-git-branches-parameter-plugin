@@ -77,7 +77,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         this.quickFilterEnabled = quickFilterEnabled;
         this.listSize = DEFAULT_LIST_SIZE;
 		
-		setType(type);
+       setType(type);
         setTagFilter(tagFilter);
         setBranchFilter(branchFilter);
     }
