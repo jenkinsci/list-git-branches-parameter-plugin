@@ -1,0 +1,5 @@
+# https://github.com/jenkinsci/.github/blob/master/.github/release-drafter.adoc
+---
+_extends: .github
+tag-template: list-git-branches-parameter-$NEXT_MINOR_VERSION
+version-template: $MAJOR.$MINOR.$PATCH

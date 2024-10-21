@@ -5,19 +5,18 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <!-- Baseline Jenkins version you use to build and test the plugin. Users
-            must have this version or newer to run. -->
-        <version>4.51</version>
+        <version>4.88</version>
+        <relativePath />
     </parent>
 
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>list-git-branches-parameter</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
 
     <packaging>hpi</packaging>
     <name>List Git Branches Parameter PlugIn</name>
     <description>Assign git tag or revision number as parameter in Parametrized builds</description>
-    <url>https://wiki.jenkins.io/display/JENKINS/List+Git+Branches+Parameter+Plugin</url>
+    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
 
     <licenses>
         <license>
@@ -34,7 +33,10 @@
     </repositories>
 
     <properties>
-        <jenkins.version>2.346.3</jenkins.version>
+        <revision>0.0.14</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <jenkins.version>2.440.3</jenkins.version>
+        <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
     </properties>
 
     <developers>
@@ -66,8 +68,8 @@
         <dependencies>
             <dependency>
                 <groupId>io.jenkins.tools.bom</groupId>
-                <artifactId>bom-2.346.x</artifactId>
-                <version>1763.v092b_8980a_f5e</version>
+                <artifactId>bom-2.440.x</artifactId>
+                <version>3435.v238d66a_043fb_</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -78,6 +80,12 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>git</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
@@ -87,19 +95,17 @@
         <dependency>
             <groupId>com.sonyericsson.hudson.plugins.rebuild</groupId>
             <artifactId>rebuild</artifactId>
-            <version>1.29</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>io.jenkins.plugins</groupId>
             <artifactId>commons-lang3-api</artifactId>
-            <version>3.12.0-36.vd97de6465d5b_</version>
         </dependency>
         <!-- Test scope -->
         <dependency>
             <groupId>org.jenkins-ci.plugins.workflow</groupId>
             <artifactId>workflow-aggregator</artifactId>
-            <version>2.7</version>
+            <version>600.vb_57cdd26fdd7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -111,10 +117,10 @@
     </dependencies>
 
     <scm>
-        <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-        <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
-      <tag>list-git-branches-parameter-0.0.9</tag>
-  </scm>
+        <connection>scm:git:https://github.com/${gitHubRepo}.git</connection>
+        <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+        <url>https://github.com/${gitHubRepo}</url>
+        <tag>${scmTag}</tag>
+    </scm>
 
 </project>
