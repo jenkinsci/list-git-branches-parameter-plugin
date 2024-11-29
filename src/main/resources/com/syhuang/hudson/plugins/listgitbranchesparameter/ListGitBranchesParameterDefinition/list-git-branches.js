@@ -153,3 +153,14 @@ var ListGitBranches = ListGitBranches || (function($) {
     instance.QuickFilter = QuickFilter;
     return instance;
 })(jQuery);
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".lgbp-quick-filter-data-holder").forEach((dataHolder) => {
+        const { divId, defaultValue, selectedValue } = dataHolder.dataset;
+
+        var parentDiv = jQuery(`#${divId}`);
+        new ListGitBranches.QuickFilter(parentDiv.find('.select').get(0),
+            parentDiv.find('.git_parameter_quick_filter').get(0),
+            selectedValue, defaultValue);
+    });
+});
