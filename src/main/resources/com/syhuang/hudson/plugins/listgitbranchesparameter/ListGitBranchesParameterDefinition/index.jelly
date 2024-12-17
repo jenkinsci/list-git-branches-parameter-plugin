@@ -3,7 +3,7 @@
          xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
          xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
     <st:adjunct includes="io.jenkins.plugins.jquery3" />
-    <st:adjunct includes="com.syhuang.hudson.plugins.listgitbranchesparameter.script" />
+    <st:adjunct includes="com.syhuang.hudson.plugins.listgitbranchesparameter.ListGitBranchesParameterDefinition.list-git-branches"/>
     <j:set var="divId" value="${it.divUUID}" scope="parent" />
     <j:set var="escapeEntryTitleAndDescription" value="false"/>
     <f:entry title="${h.escape(it.name)}" description="${it.formattedDescription}">
@@ -19,12 +19,8 @@
                 <input class='git_parameter_quick_filter' type='text' value='' name='quickFilter' placeholder='Filter'
                        style="vertical-align: top" id="filter"/>
             </j:if>
-            <script type="text/javascript">
-                var parentDiv = jQuery('#${divId}');
-                new ListGitBranches.QuickFilter(parentDiv.find('.select').get(0),
-                        parentDiv.find('.git_parameter_quick_filter').get(0),
-                        "${it.selectedValue}", "${it.defaultValue}");
-            </script>
+            <span class="lgbp-quick-filter-data-holder" data-selected-value="${it.selectedValue}"
+                  data-default-value="${it.defaultValue}" data-div-id="${divId}"/>
         </div>
     </f:entry>
 </j:jelly>
