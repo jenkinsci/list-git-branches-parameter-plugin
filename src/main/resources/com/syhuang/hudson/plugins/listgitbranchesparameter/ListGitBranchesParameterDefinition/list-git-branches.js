@@ -22,10 +22,8 @@
  * THE SOFTWARE.
  */
 'use strict';
-jQuery.noConflict();
 
-
-var ListGitBranches = ListGitBranches || (function($) {
+var ListGitBranches = ListGitBranches || (function() {
     var instance = {};
 
     function QuickFilter(selectElement, filterElement, selectedValue, defaultValue) {
@@ -35,7 +33,7 @@ var ListGitBranches = ListGitBranches || (function($) {
         this.defaultValue = defaultValue;
         this.originalOptions = new Array();
 
-        jQuery(this.filterElement).prop("disabled",true);
+        jQuery3(this.filterElement).prop("disabled",true);
 
         this.initEventHandler();
     }
@@ -62,7 +60,7 @@ var ListGitBranches = ListGitBranches || (function($) {
 
     QuickFilter.prototype.setSelected = function() {
         var _self = this;
-        var filteredElement = jQuery(_self.getSelectElement()).get(0);
+        var filteredElement = jQuery3(_self.getSelectElement()).get(0);
         var selectedValue = _self.getSelectedValue();
         var optionsLength = filteredElement.length;
 
@@ -104,7 +102,7 @@ var ListGitBranches = ListGitBranches || (function($) {
     QuickFilter.prototype.initEventHandler = function() {
         var _self = this;
 
-        jQuery(_self.getSelectElement()).on("filled", function() {
+        jQuery3(_self.getSelectElement()).on("filled", function() {
             var options = _self.getSelectElement().options;
 
             for (var i = 0; i < options.length; ++i) {
@@ -113,11 +111,11 @@ var ListGitBranches = ListGitBranches || (function($) {
 
             _self.setSelected();
 
-            jQuery(_self.getFilterElement()).prop("disabled",false).focus();
+            jQuery3(_self.getFilterElement()).prop("disabled",false).focus();
             console.log("Quick Filter handler filled event." );
         });
 
-        jQuery(_self.filterElement).keyup(function(e) {
+        jQuery3(_self.filterElement).keyup(function(e) {
             var filterElement = _self.getFilterElement();
             var filteredElement = _self.getSelectElement();
             var originalOptions = _self.getOriginalOptions();
@@ -126,39 +124,39 @@ var ListGitBranches = ListGitBranches || (function($) {
             var regex = new RegExp(search,"gi");
 
             var filteredOptions = Array();
-            $.each(originalOptions, function(i) {
+            jQuery3.each(originalOptions, function(i) {
                 var option = originalOptions[i];
                 if(option.text.match(regex) !== null) {
                     filteredOptions.push(option)
                 }
             });
 
-            jQuery(filteredElement).children().remove();
+            jQuery3(filteredElement).children().remove();
             for (var i = 0; i < filteredOptions.length ; ++i) {
                 var opt = document.createElement('option');
                 opt.value = filteredOptions[i].value;
                 opt.innerHTML = filteredOptions[i].innerHTML;
-                jQuery(filteredElement).append(opt);
+                jQuery3(filteredElement).append(opt);
             }
 
             _self.setSelected();
 
             // Propagate the changes made by the filter
             console.log('Propagating change event after filtering');
-            var e = jQuery.Event('change', {parameterName: 'Filter Element Event'});
-            jQuery(filteredElement).trigger(e);
+            var e = jQuery3.Event('change', {parameterName: 'Filter Element Event'});
+            jQuery3(filteredElement).trigger(e);
         });
     }
 
     instance.QuickFilter = QuickFilter;
     return instance;
-})(jQuery);
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".lgbp-quick-filter-data-holder").forEach((dataHolder) => {
         const { divId, defaultValue, selectedValue } = dataHolder.dataset;
 
-        var parentDiv = jQuery(`#${divId}`);
+        var parentDiv = jQuery3(`#${divId}`);
         new ListGitBranches.QuickFilter(parentDiv.find('.select').get(0),
             parentDiv.find('.git_parameter_quick_filter').get(0),
             selectedValue, defaultValue);
