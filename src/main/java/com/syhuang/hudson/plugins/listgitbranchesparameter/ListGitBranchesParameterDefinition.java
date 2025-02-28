@@ -29,7 +29,7 @@ import org.jvnet.localizer.ResourceBundleHolder;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     }
 
     @Override
-    public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
+    public ParameterValue createValue(StaplerRequest2 req, JSONObject jo) {
         Object value = jo.get("value");
         StringBuilder strValue = new StringBuilder();
         if (value instanceof String) {
@@ -106,7 +106,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     }
 
     @Override
-    public ParameterValue createValue(StaplerRequest req) {
+    public ParameterValue createValue(StaplerRequest2 req) {
         String value[] = req.getParameterValues(getName());
         if (value == null || value.length == 0 || StringUtils.isBlank(value[0])) {
             return this.getDefaultParameterValue();
@@ -461,7 +461,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
                     );
         }
 
-        public FormValidation doCheckRemoteURL(StaplerRequest req, @AncestorInPath Item context, @QueryParameter String value) {
+        public FormValidation doCheckRemoteURL(StaplerRequest2 req, @AncestorInPath Item context, @QueryParameter String value) {
             String url = Util.fixEmptyAndTrim(value);
 
             if (url == null) {
