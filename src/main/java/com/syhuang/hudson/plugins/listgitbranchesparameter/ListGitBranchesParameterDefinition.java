@@ -7,6 +7,7 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.*;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.cloudbees.plugins.credentials.domains.URIRequirementBuilder;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Util;
@@ -29,7 +30,7 @@ import org.jvnet.localizer.ResourceBundleHolder;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     public ListGitBranchesParameterDefinition(String name, String description, String remoteURL, String credentialsId, String defaultValue,
                                               SortMode sortMode, SelectedValue selectedValue, Boolean quickFilterEnabled,
                                               String type, String tagFilter, String branchFilter, String listSize) {
-        super(name, description);
+        super(name);
         this.remoteURL = remoteURL;
         this.credentialsId = credentialsId;
         this.defaultValue = defaultValue;
@@ -77,20 +78,20 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         this.quickFilterEnabled = quickFilterEnabled;
         this.listSize = listSize;
 
+        setDescription(description);
         setType(type);
         setTagFilter(tagFilter);
         setBranchFilter(branchFilter);
     }
 
     @Override
-    public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
+    public ParameterValue createValue(StaplerRequest2 req, JSONObject jo) {
         Object value = jo.get("value");
         StringBuilder strValue = new StringBuilder();
         if (value instanceof String) {
             strValue.append(value);
-        } else if (value instanceof JSONArray) {
-            JSONArray jsonValues = (JSONArray) value;
-            for (int i = 0; i < jsonValues.size(); i++) {
+        } else if (value instanceof JSONArray jsonValues) {
+	        for (int i = 0; i < jsonValues.size(); i++) {
                 strValue.append(jsonValues.getString(i));
                 if (i < jsonValues.size() - 1) {
                     strValue.append(",");
@@ -98,7 +99,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
             }
         }
 
-        if (strValue.length() == 0) {
+        if (strValue.isEmpty()) {
             strValue.append(defaultValue);
         }
 
@@ -106,8 +107,8 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     }
 
     @Override
-    public ParameterValue createValue(StaplerRequest req) {
-        String value[] = req.getParameterValues(getName());
+    public ParameterValue createValue(StaplerRequest2 req) {
+        String[] value = req.getParameterValues(getName());
         if (value == null || value.length == 0 || StringUtils.isBlank(value[0])) {
             return this.getDefaultParameterValue();
         } else {
@@ -134,7 +135,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
             case TOP:
                 try {
                     ListBoxModel valueItems = getDescriptor().doFillValueItems(getParentJob(), getName());
-                    if (valueItems.size() > 0) {
+                    if (!valueItems.isEmpty()) {
                         return new ListGitBranchesParameterValue(getName(), valueItems.get(0).value);
                     }
                 } catch (Exception e) {
@@ -273,7 +274,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         ArrayList<String> tags = new ArrayList<>(set);
 
         if (getSortMode().getIsSorting()) {
-            Collections.sort(tags, new SmartNumberStringComparator());
+            tags.sort(new SmartNumberStringComparator());
         } else {
             Collections.sort(tags);
         }
@@ -321,19 +322,17 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         Pattern branchFilterPattern = compileBranchFilterPattern();
 
         Map<String, ObjectId> branches = gitClient.getRemoteReferences(gitUrl, null, true, false);
-        Iterator<String> remoteBranchesName = branches.keySet().iterator();
-        while (remoteBranchesName.hasNext()) {
-            //String branchName = strip(remoteBranchesName.next(), remoteName);
-            String branchName = remoteBranchesName.next();
-            Matcher matcher = branchFilterPattern.matcher(branchName);
-            if (matcher.matches()) {
-                if (matcher.groupCount() == 1) {
-                    branchSet.add(matcher.group(1));
-                } else {
-                    branchSet.add(branchName);
-                }
-            }
-        }
+	    for (String branchName : branches.keySet()) {
+		    //String branchName = strip(remoteBranchesName.next(), remoteName);
+		    Matcher matcher = branchFilterPattern.matcher(branchName);
+		    if (matcher.matches()) {
+			    if (matcher.groupCount() == 1) {
+				    branchSet.add(matcher.group(1));
+			    } else {
+				    branchSet.add(branchName);
+			    }
+		    }
+	    }
         return branchSet;
     }
 
@@ -344,7 +343,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
     @Nonnull
     private Map<String, String> generateContents(Job job) throws IOException, InterruptedException {
-        Map<String, String> paramList = new LinkedHashMap<String, String>();
+        Map<String, String> paramList = new LinkedHashMap<>();
         GitClient gitClient = createGitClient(job);
         try {
             if (isTagType()) {
@@ -385,8 +384,8 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         Git git = Git.with(TaskListener.NULL, env);
 
         GitClient c = git.getClient();
-        List<StandardUsernameCredentials> urlCredentials = CredentialsProvider.lookupCredentials(
-                StandardUsernameCredentials.class, job, ACL.SYSTEM, URIRequirementBuilder.fromUri(remoteURL).build()
+        List<StandardUsernameCredentials> urlCredentials = CredentialsProvider.lookupCredentialsInItem(
+                StandardUsernameCredentials.class, job, ACL.SYSTEM2, URIRequirementBuilder.fromUri(remoteURL).build()
         );
         CredentialsMatcher ucMatcher = CredentialsMatchers.withId(credentialsId);
         CredentialsMatcher idMatcher = CredentialsMatchers.allOf(ucMatcher, GitClient.CREDENTIALS_MATCHER);
@@ -412,6 +411,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         return branchFilterPattern;
     }
 
+    @NonNull
     @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl) super.getDescriptor();
@@ -448,20 +448,20 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
 
             return new StandardListBoxModel()
                     .includeEmptyValue()
-                    .withMatching(
+                    .includeMatchingAs(
+                            ACL.SYSTEM2,
+                            context,
+                            StandardCredentials.class,
+                            domainRequirements,
                             CredentialsMatchers.anyOf(
                                     CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class),
                                     CredentialsMatchers.instanceOf(StandardCertificateCredentials.class),
                                     CredentialsMatchers.instanceOf(SSHUserPrivateKey.class)
-                            ),
-                            CredentialsProvider.lookupCredentials(StandardCredentials.class,
-                                    context,
-                                    ACL.SYSTEM,
-                                    domainRequirements)
+                            )
                     );
         }
 
-        public FormValidation doCheckRemoteURL(StaplerRequest req, @AncestorInPath Item context, @QueryParameter String value) {
+        public FormValidation doCheckRemoteURL(StaplerRequest2 req, @AncestorInPath Item context, @QueryParameter String value) {
             String url = Util.fixEmptyAndTrim(value);
 
             if (url == null) {
