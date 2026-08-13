@@ -11,7 +11,7 @@
 
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>list-git-branches-parameter</artifactId>
-    <version>${revision}${changelist}</version>
+    <version>${changelist}</version>
 
     <packaging>hpi</packaging>
     <name>List Git Branches Parameter PlugIn</name>
@@ -33,8 +33,7 @@
     </repositories>
 
     <properties>
-        <revision>0.0.14</revision>
-        <changelist>-SNAPSHOT</changelist>
+        <changelist>999999-SNAPSHOT</changelist>
         <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
         <jenkins.baseline>2.479</jenkins.baseline>
         <jenkins.version>${jenkins.baseline}.1</jenkins.version>
