@@ -49,7 +49,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     private static final String EMPTY_JOB_NAME = "EMPTY_JOB_NAME";
     private static final String DEFAULT_LIST_SIZE = "5";
     private static final String REFS_TAGS_PATTERN = ".*refs/tags/";
-    private static final String REFS_HEADS_PATTERN = ".*refs/heads/";
+    private static final Pattern REFS_HEADS_PATTERN = Pattern.compile("^/?refs/heads/");
     private static final Logger LOGGER = Logger.getLogger(ListGitBranchesParameterDefinition.class.getName());
     private final UUID uuid;
     private String remoteURL;
@@ -337,13 +337,17 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
             Matcher matcher = branchFilterPattern.matcher(branchName);
             if (matcher.matches()) {
                 if (matcher.groupCount() == 1) {
-                    branchSet.add(matcher.group(1));
+                    branchSet.add(stripBranchRefPrefix(matcher.group(1)));
                 } else {
-                    branchSet.add(branchName);
+                    branchSet.add(stripBranchRefPrefix(branchName));
                 }
             }
         }
         return branchSet;
+    }
+
+    static String stripBranchRefPrefix(CharSequence branchName) {
+        return REFS_HEADS_PATTERN.matcher(branchName).replaceFirst("");
     }
 
     // looks like this strip is required by git plugin
