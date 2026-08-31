@@ -11,7 +11,7 @@
         <div name="parameter" id="${divId}">
             <st:adjunct includes="lib.form.select.select"/>
             <input type="hidden" name="name" value="${it.name}"/>
-            <select name="value" class="select" size="${it.listSize}" style="min-width: 200px" id="select"
+            <select name="value" class="jenkins-select__input" size="${it.listSize}" style="min-width: 200px" id="select"
                     fillUrl="${h.getCurrentDescriptorByNameUrl()}/${it.descriptor.descriptorUrl}/fillValueItems?param=${it.name}">
                 <option value="">${%Retrieving tags…}</option>
             </select>
