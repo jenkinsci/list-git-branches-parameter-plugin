@@ -32,7 +32,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest2;
 
-import javax.annotation.Nonnull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -341,7 +341,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
         return remote + "/" + name.substring(name.indexOf('/', 5) + 1);
     }
 
-    @Nonnull
+    @NonNull
     private Map<String, String> generateContents(Job job) throws IOException, InterruptedException {
         Map<String, String> paramList = new LinkedHashMap<>();
         GitClient gitClient = createGitClient(job);
@@ -426,7 +426,7 @@ public class ListGitBranchesParameterDefinition extends ParameterDefinition impl
     @Extension
     public static class DescriptorImpl extends ParameterDescriptor {
         @Override
-        @Nonnull
+        @NonNull
         public String getDisplayName() {
             return ResourceBundleHolder.get(ListGitBranchesParameterDefinition.class).format("displayName");
         }
